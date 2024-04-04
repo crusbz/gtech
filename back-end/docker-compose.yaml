@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - 3333:3333
+    volumes:
+      - ./:/www/app
+    depends_on:
+      - postgres
+    networks:
+      - gtech
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./docker/scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    networks:
+      - gtech
+
+networks:
+  gtech:
+    driver: bridge
